@@ -1,0 +1,42 @@
+Important Links:
+
+https://martinfowler.com/articles/microservices.html
+
+https://swagger.io/blog/api-strategy/microservices-apis-and-swagger/
+https://dzone.com/articles/microservices-vs-soa-2
+
+why we go for microservices over the SOA?
+	1.because SOA is monolithic
+		in a monolithic application, any small modification is tied to an entire change cycle, and these cycles are invariably tied to one another.
+		
+	2.Microservices are loosely coupled and it is independent of local storage
+		Each microservice defines a specific business function, and only defines operations that pertain to this function, 
+		making them very lightweight and portable. Microservices can be deployed and run in smaller hosts, and don’t have 
+		to use the RAM and CPU resources of traditional architecture.These operations can also be developed in different 
+		languages depending on the use case,so a message-board service can be built in Ruby, and the service delivering them
+		to different users can be built on Node.All of the above have contributed to the massive adoption of microservice-based architecture
+		
+	3.Microservices uses an IPC (inter process communication)	
+		Microservices and containers use an inter-process communication (IPC) mechanism to interact with each other. These interactions could be:
+			One to one, where client requests are handled by one service
+			One to many, where client requests are handled by multiple services  
+		If the IPC mechanism involves a request-response cycle, then the most common means of communication are RESTful, which almost always use HTTP/JSON APIs.
+		APIs used as IPCs between microservices are different from traditional forms. These APIs are more granular. Since APIs exposing microservices expose fine
+		grained data, clients may have to follow a one-to-many form of interactions between services to obtain the required data. 
+		
+	4.In Microservices , one monolithic services converted into multiple services which is independent on each other
+			for communicating the each services with each other , we use API's , which is the most common way
+			
+	SLA - service level agreement
+	SLO - service level objective
+	
+	Design First Approach to Microservices:
+		refer-https://swagger.io/blog/api-strategy/microservices-apis-and-swagger/
+		Here are some key considerations for adopting a Design First (or API First) approach to APIs:    
+			1.speed to market
+				Professional tools like SwaggerHub, which offers a smart API editor for intelligent design, and Domains to quicken API design delivery,
+				can help achieve quick go-to market speeds for your APIs.
+			2.Flexible Orchestration
+			3.Responsible Design
+			
+	
