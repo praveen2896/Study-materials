@@ -1,0 +1,33 @@
+1. Why we use REST over SOAP?
+	REST also makes efficient use of bandwidth, as it's much less verbose than SOAP. Unlike SOAP, REST is designed to be stateless, and REST reads can be cached for better performance and scalability. REST supports many data formats, but the predominant use of JSON means better support for browser clients.
+	
+	SOAP - Protocol
+	REST - Architectural Style
+	
+	Benefits:
+		1.client-server communication
+		2.Stateless
+		3.Cacheable
+			Data can be marked as Cacheable, which means it can be reused by the browser later without having to initiate another request back to the server. This saves time and resources.
+		4.Less bandwidth
+		5.REST can use the secure version of the HTTP protocol, HTTPS for security.
+		6.REST tends to use HTTP and JSON, which lighten the payload; SOAP relies more on XML which is tightly coupled with the server.
+		7.it uses 
+	Disadvantages:
+		1.Lacks of ACID compliance - (Atomicity, Consistency, Isolation, Durability) 
+		2.Less Security - Both REST and SOAP support SSL for end-to-end security, and REST can use the secure version of the HTTP protocol, HTTPS.
+		                  whereas SOAP supports WS-Security, which is great at the transport level and a bit more comprehensive than SSL, and more
+						  ideal for integration with enterprise-level security tools.
+		3.Mostly suitable for creating public API
+		4.Transfer is over HTTP only whereas SOAP ,It transfers over HTTP,SMTP,FTP,etc..
+		
+	Note: REST service is a web service, but a web service is not necessarily a REST service.
+	
+	Example:
+	SOAP is like using an Envelope - Extra overhead ,more Bandwidth required,more work on both ends(sealing and opening)
+	REST is like a Postcard -Lighter weight , can be cached,easier to update
+	
+	
+2. Shall we use XML over REST? - Yes
+
+
