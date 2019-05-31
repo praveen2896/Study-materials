@@ -1,0 +1,119 @@
+MongoDb:
+	4 ways to insert the document MongoDb .
+	
+	1,By using BasicDBObject:(http://api.mongodb.com/java/2.0/com/mongodb/BasicDBObject.html)
+		BasicDBObject is a class which is inherited from the DbObject Interface
+		
+		All Implemented Interfaces:
+			DBObject, Serializable, Cloneable, Map<String,Object>, BSONObject
+			
+				Example:
+					BasicDBObject document = new BasicDBObject();
+					document.put("database", "mkyongDB");
+					document.put("table", "hosting");
+
+					BasicDBObject documentDetail = new BasicDBObject();
+					documentDetail.put("records", 99);
+					documentDetail.put("index", "vps_index1");
+					documentDetail.put("active", "true");
+					
+					document.put("detail", documentDetail);
+
+					collection.insert(document);
+					
+	2,By using BasicDBObjectBuilder:(http://api.mongodb.com/java/2.10.1/com/mongodb/BasicDBObjectBuilder.html)
+		public class BasicDBObjectBuilder extends Object
+		
+		utility for building complex objects,
+		Example: BasicDBObjectBuilder.start().add( "name" , "eliot" ).add( "number" , 17 ).get()
+		
+				Example:
+					BasicDBObjectBuilder documentBuilder = BasicDBObjectBuilder.start()
+					.add("database", "mkyongDB")
+					.add("table", "hosting");
+					
+					BasicDBObjectBuilder documentBuilderDetail = BasicDBObjectBuilder.start()
+					.add("records", 99)
+					.add("index", "vps_index1")
+					.add("active", "true");
+	
+					documentBuilder.add("detail", documentBuilderDetail.get());
+					
+					collection.insert(documentBuilder.get());
+					
+		
+	3.By using Map :
+		Map<String, Object> documentMap = new HashMap<String, Object>();
+		documentMap.put("database", "mkyongDB");
+		documentMap.put("table", "hosting");
+			
+		Map<String, Object> documentMapDetail = new HashMap<String, Object>();
+		documentMapDetail.put("records", 99);
+		documentMapDetail.put("index", "vps_index1");
+		documentMapDetail.put("active", "true");
+		
+		documentMap.put("detail", documentMapDetail);
+		
+		collection.insert(new BasicDBObject(documentMap));
+		
+	4.By using Json	:
+		String json = "{'database' : 'mkyongDB','table' : 'hosting'," +
+		"'detail' : {'records' : 99, 'index' : 'vps_index1', 'active' : 'true'}}}";
+
+		DBObject dbObject = (DBObject)JSON.parse(json);
+			
+		collection.insert(dbObject);
+		
+	Common Example:(https://www.mkyong.com/mongodb/java-mongodb-insert-a-document/)
+	
+	
+	ways to find Document in Mongodb collection:
+	
+					BasicDBObject document = new BasicDBObject();
+					document.put("database", "mkyongDB");
+					document.put("table", "hosting");
+
+					BasicDBObject documentDetail = new BasicDBObject();
+					documentDetail.put("records", 99);
+					documentDetail.put("index", "vps_index1");
+					documentDetail.put("active", "true");
+					
+					document.put("detail", documentDetail);
+
+					collection.insert(document);
+	
+					DBCursor cursorDocBuilder = collection.find();
+					while (cursorDocBuilder.hasNext()) {
+					System.out.println(cursorDocBuilder.next());
+	}
+	
+	ways to remove the Mongodb document;
+	
+					1.collection.remove(new BasicDBObject());
+					2.collection.remove(new BasicDBObject());
+					3.collection.remove(new BasicDBObject());
+					4.collection.remove(new BasicDBObject());
+	
+	Note:
+	
+		What is the difference between BasicDBObject and DBObject in MongoDB?
+			BasicDBObject behave like Map<?,?>, it store data in Key Value pair.There are many way to create BasicDBObject like you also can create BasicDBObject by Map<?, ?>.
+
+			Now you can use save(DBObject dbObject) or insert(DBObject dbObject) method to insert given object in database.The difference between save and insert is that save has limited no of function while insert has many choice to insert data.
+
+			Save and insert method’s signature is DBObject so don’t get confused, DBObject is Interface and BasicDBObject is Implementing Class of DBObject
+			
+			        DBObject - Interface
+					BasicDbObject - class which implements DBObject
+	
+	
+	
+
+		
+		
+		
+		
+		
+		
+						
+		
