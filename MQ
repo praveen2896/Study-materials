@@ -1,0 +1,95 @@
+Message queues
+A message queue provides an asynchronous communications protocol, a system that puts a message onto a message queue does not require an immediate response to continuing processing. Email is probably the best example of asynchronous messaging. When an email is sent can the sender continue processing other things without an immediate response from the receiver. This way of handling messages decouple the producer from the consumer. The producer and the consumer of the message do not need to interact with the message queue at the same time.
+
+The InitialContext provides a network connection to a JNDI store from which JMS‑administered objects can be looked up. A JNDI connection between the JMS client and a JNDI store is created when a JNDI lookup is made with that InitialContext.
+
+
+Looking Up a Connection Factory from the Solace JNDI Store
+
+
+						
+						
+
+
+InitialContext is then created, and a lookup for a SolConnectionFactory in the JNDI store that resides on the message broker is performed.
+
+to create a Session, call connnection.createSession(boolean transacted, int acknowledgeMode)
+
+transacted set whether the Session is to be transacted .by default it is set to false and it is not transacted.
+
+
+Acknowledgement modes : four acknowledgement options are there,
+			For this we use Session.AUTO_ACKNOWLEDGE
+				The Session automatically acknowledges a client’s receipt of a message either when the Session successfully returns from a call to receive or when the message listener the Session calls to process the message successfully returns.
+	
+For transacted session the acknowledgement mode is ignored. because it will be acknowledged automatically after commit()
+				
+				
+
+In transacted session, we can send the group of messages in an single atomic unit , it will be transacted once we use commit () after receiving the single unit in queue from the producer . After commit() it will begins the next transaction., the queue receives the messages simultaneously  until commit() is called .
+
+In Non transacted session , we can send the single message only as of my understanding. So only we send the acknowledgement while creating the session.
+		In other word's , we can send  single message in single transaction  (i.e) non-transacted session.
+				we can send  group of messages in single transaction  (i.e) transacted session.
+			
+
+				
+In transacted sessions, if anyone of the messages are failed to receive the queue, the transaction is aborted without sending the other messages in the transaction. After that new transaction begins .(Messages are not guaranteed until we commit the transaction)
+
+
+
+		
+		
+
+
+
+In our case , below one is suitable, Because we are using queue as a message router.
+
+
+
+	
+	
+
+
+ 
+Refer: https://dev.solace.com/samples/solace-samples-jms/persistence-with-queues/
+			
+			
+Message Producer:
+
+void send(Destination destination, Message message, int deliveryMode, int priority, long timeToLive)
+
+	destination - the destination to send this message to (it will be set at the time of creating message producer)
+	message - the message to send (messageproducer.send(message))
+	deliveryMode - the delivery mode to use (it is set by default to persistent)
+	priority - the priority for this message Not supported (0 to 9) 
+	timeToLive - the message's lifetime (in milliseconds) Supported since 4.6.1 SolOS-TR (time given in milliseconds-long value)
+	
+Message consumer:
+	With a connection, you then need to create a Session and bind to Solace messaging queue by creating a MessageConsumer
+	
+	After creating the session , we need to do this,
+	Queue queue = session.createQueue(QUEUE_NAME);
+	MessageConsumer messageConsumer = session.createConsumer(queue);
+	
+	After this we read the message in the queue using the message listener.
+	
+	Using dumpmessage , we can see the message in the specified format in the queue.
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
