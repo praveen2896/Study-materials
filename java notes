@@ -1,0 +1,40 @@
+why static methods cannot be override?
+		1.static methods are not associated with any instance , it is associated only with reference.
+		2.To override the any methods in Java, it must be associated with instance
+		
+		what is overriding? & can we override static methods?
+		1.A subclass provide a specific implementation of a method in superclass
+		2.related to run-time polymorphism,which means which function call is happened will be decided at run time.
+		3.NO,we cannot override static methods.
+		
+		what is overloading?
+		1.This feature allows different methods to have same name, but different signatures, especially number of input parameters and type of input parameters.
+		2.related to compile-time polymorphism.
+		the method according to the type of reference is called, not according to the object being referred, which means method call is decided at compile time.
+		3.YES, we can override static methods.
+		
+
+why Hash code collision occurs in HashMap Java?
+		1.When it will occur?
+			 1.A collision will occur on Hash-table or HashMap when hashCode() method of two different key objects will return same values. 
+			 2.Collision happens when multiple keys hash to the same bucket. the keys hash is generated from hashCode()
+		2.How Java handles Collision?
+			 1.Before Java8 ,Java handles collision by chaining.(i.e.) they use linked list to store map entries which ended in the same bucket due to a collision. If a key end up in same bucket location where an entry is already stored then this entry is just added at the head of the linked list there .but this degrades the performance of get() method of HashMap to 0(n) from 0(1).
+			 2.Java8 has started using a balanced tree instead of linked list for storing collided entries. This also means that in the worst case you will get a performance boost from O(n) to O(log n).
+			 
+			NOTE:
+			The threshold of switching to the balanced tree is defined as TREEIFY_THRESHOLD constant in java.util.HashMap JDK 8 code.  Currently, it's value is 8, which means if there are more than 8 elements in the same bucket than HashMap will use a tree instead of linked list to hold them in the same bucket. 
+			
+		3.why?.......
+		
+
+		
+
+		
+		
+		
+			
+
+
+
+
