@@ -1,0 +1,317 @@
+
+Spring  Boot:
+	Spring Boot is an evolution of Spring which helps create stand-alone, production-grade Spring based applications with minimal effort.
+	
+@SpringBootApplication
+	used to enable the three features,
+	@EnableAutoConfiguration: enable Spring Boot’s auto-configuration mechanism
+	@ComponentScan: enable @Component scan on the package where the application is located (see the best practices)
+	@Configuration: allow to register extra beans in the context or import additional configuration classes
+	The @SpringBootApplication annotation enables auto-configuration and component scanning.
+	
+
+difference between Spring and Spring boot?
+		https://www.baeldung.com/spring-vs-spring-boot
+		
+CommandLine Runner
+		It can be used to create command line applications in Spring Boot.
+		Example:
+		@SpringBootApplication
+		public class Application implements CommandLineRunner
+		{
+			
+		}
+		
+@RestController
+	1.class-level annotation
+	2.Spring RestController. Spring RestController annotation is a convenience annotation that is itself annotated with @Controller and @ResponseBody . This annotation is applied to a class to 
+	mark it as a request handler. Spring RestController annotation is used to create RESTful web services using Spring MVC
+	
+@RequestMapping
+	1.The @RequestMapping annotation can be applied to class-level and/or method-level in a controller.
+	2.It consists of number of parameters ,
+		1.with HTTP Method
+			1.@GetMapping is a composed annotation that acts as a shortcut for @RequestMapping(method = RequestMethod.GET)
+			same as @GetMapping
+					@PostMapping
+					@PutMapping
+					@DeleteMapping
+		2.with header
+		3.with producible and consumable(produces,consumes)
+		4.with Request parameters (params)
+	
+@Requestparam
+	1.The @RequestParam annotation can be used with or without a value. The value specifies the request param that needs to be mapped to the handler method parameter,
+	
+	
+@ResponseBody
+				@RequestMapping(value="/orders", method=RequestMethod.GET)
+				@ResponseBody
+				public List<Account> accountSummary() {
+					return accountManager.getAllAccounts();
+				}
+				Now what the annotation(@ResponseBody) means is that the returned value of the method will constitute the body of the HTTP response. Of course, an HTTP response can't contain Java objects. So this list of accounts is transformed to a format suitable for REST applications, typically JSON or XML.
+				
+				
+@RequestBody
+				@ResponseBody @RequestMapping("/description")
+				public Description getDescription(@RequestBody UserStats stats){
+					return new Description(stats.getFirstName() + " " + stats.getLastname() + " hates wacky wabbits");
+				}
+
+				// domain / value objects
+				public class UserStats{
+					private String firstName;
+					private String lastName;
+					// + getters, setters
+				}
+				public class Description{
+					private String description;
+					// + getters, setters, constructor
+				}
+				
+				Now if you have Jackson on your classpath (and have an <mvc:annotation-driven> setup), Spring would convert the incoming JSON to a UserStats object from the post body (because you added the @RequestBody annotation) and it would serialize the returned object to JSON (because you added the @ResponseBody annotation). So the Browser / Client would see this JSON result,
+				
+				Note: RequestBody / ResponseBody is of course not limited to JSON, both can handle multiple formats, including plain text and XML, but JSON is probably the most used format.
+				
+Note:
+	To avoid using @RequestBody and @ResponseBody along with @Controller , we start using @RestController annotation for request handler
+	
+@Autowired
+  Mainly to do constructor injection
+  You are free to use any of the standard Spring Framework techniques to define your beans and their injected dependencies. For simplicity, we often find that using @ComponentScan (to find your 
+beans) and using @Autowired (to do constructor injection) works well.
+
+ refer:https://www.baeldung.com/spring-autowire
+ 
+ Note:
+	If a bean has one constructor, you can omit the @Autowired.
+	ex:
+		@Service
+		public class DatabaseAccountService implements AccountService {
+
+			private final RiskAssessor riskAssessor;
+			
+			@Autowired -->omit this
+			public DatabaseAccountService(RiskAssessor riskAssessor) {
+				this.riskAssessor = riskAssessor;
+			}
+
+			// ...
+
+		}
+  By specifying the @Qualifier with the name of the specific implementation, in this case as fooFormatter, we can avoid ambiguity when Spring finds multiple beans of the same type.
+  ex:
+   The @Qualifier annotation can be used to hint at and narrow down the required bean:
+
+
+				@Component("fooFormatter")
+				public class FooFormatter implements Formatter {
+				 
+					public String format() {
+						return "foo";
+					}
+				}
+				@Component("barFormatter")
+				public class BarFormatter implements Formatter {
+				 
+					public String format() {
+						return "bar";
+					}
+
+				public class FooService {
+					 
+					@Autowired
+					private Formatter formatter;
+				 
+				}
+
+				 Since there are two concrete implementations of Formatter available for the Spring container to inject, Spring will throw a NoUniqueBeanDefinitionException exception when constructing the FooService:
+				  to avoid this , we use qualifier,
+				  This can be avoided by narrowing the implementation using a @Qualifier annotation:
+
+
+				public class FooService {
+					 
+					@Autowired
+					@Qualifier("fooFormatter")
+					private Formatter formatter;
+				 
+				}
+				By specifying the @Qualifier with the name of the specific implementation, in this case as fooFormatter, we can avoid ambiguity when Spring finds multiple beans of the same type.
+
+				Please note that the value of the @Qualifier annotation matches with the name declared in the @Component annotation of our FooFormatter implementation
+					Starting with Spring 2.5, the framework introduced a new style of Dependency Injection driven by @Autowired Annotations. This annotation allows Spring to resolve and inject collaborating beans into your bean.
+					
+	
+where we used,,?
+	used on setters,constructors and properties
+	
+ @Autowired(required=false)
+	@Autowired with required = false. By default, the @Autowired annotation implies that the dependency is required. This means an exception will be thrown when a dependency is not resolved. You can override that default behavior using the (required=false) option with @Autowired 
+	
+@Qualifier -  used when you only have multiple bean of the type , to avoid NouniqueBeanException, we need to use this annotation
+
+	it’s use is simple. Suppose you have two beans that implement the MarketPlace interface.
+	If you declare an array of MarketPlaces - then Spring will provide all beans that implement that interface:
+	Example: (https://spring.io/blog/2014/11/04/a-quality-qualifier)
+		@Autowired
+		private MarketPlace[] marketPlaces; //in this array we have ios and Android - this line injects all the two beans (i.e.ios and Android)
+		If you want to inject just one, you need to disambiguate the references. 
+		You can, in the simple case, just do so by bean ID:
+
+		@Autowired 
+		@Qualifier( "ios") // the use is unique to Spring. It's darned convenient, too!
+		private MarketPlace marketPlace ;
+		This assumes you’ve elsewhere defined a bean whose ID is ios. This use is unique to Spring.
+		You can also use @Qualifier to create a type-safe binding that links the bean definition to
+		the injection site by the qualities of the qualifier annotation
+		
+
+@Autowired vs @Qualifier vs @primary
+
+			
+Read @Primary as the "default".
+
+If a bean has @Autowired without any @Qualifier, and multiple beans of the type exist, the candidate bean marked @Primary will be chosen, i.e. it is the default selection when no other information is available, i.e. when @Qualifier is missing.
+
+A good use case is that initially you only had one bean of the type, so none of the code used @Qualifier. When you then add another bean, you then also add @Qualifier to both the old and the new bean, so any @Autowired can choose which one it wants. By also adding @Primary to the old original bean, you don't have to add @Qualifier to all the existing @Autowired. They are "grandfathered" in, so to speak.
+		
+	
+	
+@PostConstruct 
+		When you call the init method from the constructor of class App, Spring has not yet autowired the dependencies into the App object. If you want to call this method after Spring has finished creating and autowiring the App object, then add a method with a @PostConstruct annotation to do this, for example:
+			@SpringBootApplication
+			public class App {
+				@Autowired
+				public Starter starter;
+
+				public static void main(String[] args) {
+					SpringApplication.run(App.class, args);
+				}
+
+				public App() {
+					System.out.println("constructor of App");
+				}
+
+				@PostConstruct
+				public void init() {
+					System.out.println("Calling starter.init");
+					starter.init();
+				}
+			}
+	
+	
+@Configuration
+	Spring Boot favors Java-based configuration. Although it is possible to use SpringApplication with XML sources, we generally recommend that your primary source be a single @Configuration 
+	class. Usually the class that defines the main method is a good candidate as the primary @Configuration.
+
+@Bean
+	1.It is a method-level annotation.
+	2.Spring @Bean annotation tells that a method produces a bean to be managed by the Spring container.
+	3.During Java configuration (@Configuration), the method is executed and its return value is registered as a bean within a BeanFactory.	
+	
+Note:
+
+
+BeanFactory:(basic IOC)
+  1.BeanFactory and ApplicationContext both are ways to get beans from your spring IOC container but still there are some difference.
+  2.BeanFactory is only for Bean instantiation/wiring
+
+ ApplicationContext; (Advanced IOC)
+	1.ApplicationContexts (but not BeanFactories) will by default pre-instantiate all singletons.
+	2.ApplicationContext is used for 
+		1.Bean instantiation/wiring
+		2.Automatic BeanPostProcessor registration
+		3.Automatic BeanFactoryPostProcessor registration
+		4.Convenient MessageSource access (for i18n)
+		5.ApplicationEvent publication
+  
+@Bean vs @Auotwired
+  
+	@Bean and @Autowired do two very different things. The other answers here explain in a little more detail, but at a simpler level:
+
+	@Bean tells Spring 'here is an instance of this class, please keep hold of it and give it back to me when I ask'.
+
+	@Autowired says 'please give me an instance of this class, for example, one that I created with an @Bean annotation earlier'.  
+	
+		Ex:
+			@SpringBootApplication
+			public class Application {
+
+			  @Autowired
+			  BookingService bookingService;
+
+			  @Bean
+			  BookingService bookingService() {
+				return new BookingService();
+			  }
+
+			  public static void main(String[] args) {
+				bookingService.book("Alice", "Bob", "Carol");
+			  }
+			}
+		
+@Transactional(readOnly=true)
+	5.1 Transaction readOnly
+			If you don’t explicitly set readOnly attribute to true, you will have read/write transactions.
+			Its always better to explicitly specify the readOnly attribute, as we have noticed some massive performance
+			improvements with Hibernate because of this.
+			Example :(https://www.javacodegeeks.com/2016/05/understanding-transactional-annotation-spring.html)
+
+
+
+@persistencecontext		
+		@PersistenceContext allows you to specify which persistence unit you want to use. 
+		Your project might have multiple data sources connected to different DBs and 
+		@PersistenceContext allows you to say which one you want to operate on		
+		Example :
+				@PersistenceContext(unitName = "HkDs")
+				EntityManager emHk;
+
+				@PersistenceContext(unitName = "SgDs")
+				EntityManager emSg;
+
+				@PersistenceContext(unitName = "IdDs")
+				EntityManager emId;
+
+				@PersistenceContext(unitName = "MyDs")
+				EntityManager emMy;
+
+				@PersistenceContext(unitName = "ThDs")
+				EntityManager emTh;
+
+				@PersistenceContext(unitName = "PhDs")
+				EntityManager emPh;
+
+				@PersistenceContext(unitName = "AuDs")
+				EntityManager emAu;
+				
+@JsonProperty("entryTmstampTo")
+				Here's a good example. I use it to rename the variable because the JSON is coming from a .Net environment where properties start with an upper-case letter.
+		Example	:
+				public class Parameter {
+				  @JsonProperty("Name")
+				  public String name;
+				  @JsonProperty("Value")
+				  public String value; 
+				}
+				This correctly parses to/from the JSON:
+
+				"Parameter":{
+				  "Name":"Parameter-Name",
+				  "Value":"Parameter-Value"
+				  }
+				  
+
+
+
+
+				
+				
+				
+				  
+
+				
+		
+		
